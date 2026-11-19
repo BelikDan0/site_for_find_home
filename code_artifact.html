@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Подбор новостроек — Сочи, Москва, Краснодар</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    input[type='range'] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: #dbeafe;
+      outline: none;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #2563eb;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    input[type='range']::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      background: #1d4ed8;
+    }
+
+    input[type='range']::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #2563eb;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+      cursor: pointer;
+    }
+
+    .card-hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -8px rgba(37, 99, 235, 0.14);
+      border-color: #93c5fd;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-20 backdrop-blur-md bg-white/95">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 leading-tight">
+            Подбор новостроек
+          </h1>
+          <p class="text-xs text-slate-500">Бизнес и премиум · Сочи, Москва, Краснодар</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <span id="syncStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 border border-brand-100">
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-brand-600"></span>
+          <span id="syncText">Подключение к таблице…</span>
+        </span>
+        <button
+          id="refreshSheetBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-brand-700 bg-white border border-brand-200 hover:bg-brand-50 active:scale-95 transition"
+        >
+          <svg id="refreshIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Обновить
+        </button>
+        <a
+          href="https://docs.google.com/spreadsheets/d/1IuumWFkuwvE8EYrxRQpbKiXs2f-EO_3ZPpoeb_wAbM4/edit?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 transition shadow-sm"
+        >
+          Google Таблица
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+    <!-- Filters Card -->
+    <section class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-7 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">Параметры подбора</h2>
+          <p class="text-sm text-slate-500 mt-0.5">Выберите город, бюджет и площадь — алгоритм подберёт 3 лучших ЖК по актуальной базе</p>
+        </div>
+        <button
+          id="resetBtn"
+          type="button"
+          class="px-4 py-2 rounded-full text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200/80 active:scale-95 transition"
+        >
+          Сбросить фильтры
+        </button>
+      </div>
+
+      <!-- City & Class Pills -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2.5">Город</span>
+          <div id="cityPills" class="flex flex-wrap gap-2" role="group" aria-label="Выбор города">
+            <button type="button" data-city="Сочи" class="city-pill px-4 py-2 rounded-full text-sm font-semibold transition"></button>
+            <button type="button" data-city="Москва" class="city-pill px-4 py-2 rounded-full text-sm font-semibold transition"></button>
+            <button type="button" data-city="Краснодар" class="city-pill px-4 py-2 rounded-full text-sm font-semibold transition"></button>
+            <button type="button" data-city="Все" class="city-pill px-4 py-2 rounded-full text-sm font-semibold transition"></button>
+          </div>
+        </div>
+
+        <div>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2.5">Класс жилья</span>
+          <div id="classPills" class="flex flex-wrap gap-2" role="group" aria-label="Выбор класса">
+            <button type="button" data-class="Все" class="class-pill px-4 py-2 rounded-full text-sm font-semibold transition">Все классы</button>
+            <button type="button" data-class="Бизнес" class="class-pill px-4 py-2 rounded-full text-sm font-semibold transition">Бизнес</button>
+            <button type="button" data-class="Премиум" class="class-pill px-4 py-2 rounded-full text-sm font-semibold transition">Премиум</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget & Area Inputs -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-slate-100">
+        <!-- Budget -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <label for="budgetInput" class="text-sm font-semibold text-slate-800">Бюджет на квартиру</label>
+            <div class="flex items-center gap-1.5 bg-brand-50 border border-brand-200 rounded-full px-3.5 py-1">
+              <input
+                id="budgetInput"
+                type="number"
+                min="3"
+                max="300"
+                step="0.5"
+                value="22"
+                class="w-16 text-right bg-transparent font-bold text-brand-700 text-sm focus:outline-none"
+              />
+              <span class="text-xs font-semibold text-brand-700">млн ₽</span>
+            </div>
+          </div>
+          <input id="budgetSlider" type="range" min="5" max="150" step="0.5" value="22" aria-label="Слайдер бюджета" />
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" data-budget="12" class="budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">12 млн</button>
+            <button type="button" data-budget="22" class="budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">22 млн</button>
+            <button type="button" data-budget="35" class="budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">35 млн</button>
+            <button type="button" data-budget="60" class="budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">60 млн</button>
+            <button type="button" data-budget="100" class="budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">100 млн</button>
+          </div>
+        </div>
+
+        <!-- Area -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <label for="areaInput" class="text-sm font-semibold text-slate-800">Желаемая площадь</label>
+            <div class="flex items-center gap-1.5 bg-brand-50 border border-brand-200 rounded-full px-3.5 py-1">
+              <input
+                id="areaInput"
+                type="number"
+                min="15"
+                max="300"
+                step="1"
+                value="50"
+                class="w-16 text-right bg-transparent font-bold text-brand-700 text-sm focus:outline-none"
+              />
+              <span class="text-xs font-semibold text-brand-700">м²</span>
+            </div>
+          </div>
+          <input id="areaSlider" type="range" min="20" max="150" step="1" value="50" aria-label="Слайдер площади" />
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" data-area="30" class="area-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">30 м²</button>
+            <button type="button" data-area="50" class="area-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">50 м²</button>
+            <button type="button" data-area="70" class="area-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">70 м²</button>
+            <button type="button" data-area="100" class="area-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition">100 м²</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary bar & sort mode -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+        <div id="summaryBanner" class="text-sm text-slate-600"></div>
+        <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-full">
+          <button type="button" data-sort="best" class="sort-pill px-3.5 py-1.5 rounded-full text-xs font-semibold transition">Ближе к бюджету</button>
+          <button type="button" data-sort="cheapest" class="sort-pill px-3.5 py-1.5 rounded-full text-xs font-semibold transition">Сначала дешевле</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Header -->
+    <section class="space-y-4">
+      <div class="flex flex-wrap items-baseline justify-between gap-2 px-1">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900">
+          Топ-3 подходящих ЖК
+        </h2>
+        <p id="resultsSubtitle" class="text-xs sm:text-sm text-slate-500"></p>
+      </div>
+
+      <!-- Top 3 Cards -->
+      <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5"></div>
+    </section>
+
+    <!-- Full Database Toggle -->
+    <section class="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div class="p-4 sm:px-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900">Полная база из Части 1 (15 ЖК)</h3>
+          <p class="text-xs text-slate-500">Проверенные минимальные цены за м² и прямые ссылки на источники</p>
+        </div>
+        <button
+          id="toggleTableBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 active:scale-95 transition"
+        >
+          <span id="toggleTableLabel">Показать таблицу</span>
+          <svg id="toggleTableArrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="fullTableWrap" class="hidden border-t border-slate-100 overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+              <th class="py-3 px-4 font-semibold">Город</th>
+              <th class="py-3 px-4 font-semibold">ЖК</th>
+              <th class="py-3 px-4 font-semibold">Застройщик</th>
+              <th class="py-3 px-4 font-semibold">Класс</th>
+              <th class="py-3 px-4 font-semibold text-right">Цена от (₽/м²)</th>
+              <th class="py-3 px-4 font-semibold text-right">Оценка (<span id="tableAreaLabel">50</span> м²)</th>
+              <th class="py-3 px-4 font-semibold">Срок сдачи</th>
+              <th class="py-3 px-4 font-semibold text-right">Источник</th>
+            </tr>
+          </thead>
+          <tbody id="fullTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-5xl mx-auto px-4 sm:px-6 pb-8 pt-2 text-center text-xs text-slate-400">
+    Расчёт примерной стоимости квартиры выполняется по формуле: <span class="text-slate-500 font-medium">цена от (₽/м²) × желаемая площадь (м²)</span>. Данные синхронизируются с Google Таблицей.
+  </footer>
+
+  <script>
+    const SHEET_ID = '1IuumWFkuwvE8EYrxRQpbKiXs2f-EO_3ZPpoeb_wAbM4';
+    const SHEET_NAME = 'Данные';
+    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+    // Проверенная база из таблицы «Таблица_проверена_лоты» (резервная копия + кликабельные ссылки)
+    const FALLBACK_DATA = [
+      {
+        id: 'kislorod',
+        city: 'Сочи',
+        name: 'ЖК «Кислород»',
+        developer: 'AVA Group (СЗ Кислород)',
+        district: 'Хостинский (мкр. Бытха)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 311111,
+        completion: 'Сдан (2023)',
+        sourceLabel: 'Винсент Недвижимость / Яндекс',
+        sourceUrl: 'https://www.vincent-realty.ru/offers/buildings/business/zhk-kislorod/',
+        lotNote: '18 м², 5 600 000 ₽ (311 111 ₽/м²)',
+      },
+      {
+        id: 'olivia',
+        city: 'Сочи',
+        name: 'ЖК «Оливия» (Olivia)',
+        developer: 'ГК Альпика',
+        district: 'Адлерский (ул. Ленина, 290/6)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 544401,
+        completion: '4 кв. 2026 (есть сданные)',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/novostroyki/zhk-olivia',
+        lotNote: '1-комн. 29,8 м², 4/7 эт. (544 401 ₽/м²)',
+      },
+      {
+        id: 'svetskiy-les',
+        city: 'Сочи',
+        name: 'ЖК «Светский лес»',
+        developer: 'ГК ТОЧНО',
+        district: 'Центральный (ул. Краснодонская)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 395052,
+        completion: '4 кв. 2028',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/novostroyki/zhk-svetskiy-les',
+        lotNote: '2-комн. 66,29 м² (395 052 ₽/м²)',
+      },
+      {
+        id: 'lestoriya',
+        city: 'Сочи',
+        name: 'ЖК «Лестория»',
+        developer: 'ГК Неометрия',
+        district: 'Хостинский (мкр. Кудепста)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 416514,
+        completion: '4 кв. 2026 (есть сданные)',
+        sourceLabel: 'Домклик',
+        sourceUrl: 'https://krasnodar.domclick.ru/complexes/lestoriia__119405',
+        lotNote: '2-комн. 44,4 м² (416 514 ₽/м²)',
+      },
+      {
+        id: 'greenmont',
+        city: 'Сочи',
+        name: 'ГК «Greenmont» (Гринмонт)',
+        developer: 'ГК Неометрия',
+        district: 'Адлерский (Курортный городок)',
+        housingClass: 'Премиум (апартаменты)',
+        pricePerSqm: 792785,
+        completion: 'Сдан (2026)',
+        sourceLabel: 'М2',
+        sourceUrl: 'https://m2.ru/sochi/novostroyki/zhk-gostinichnii-kompleks-grinmont-11389/',
+        lotNote: 'Апартаменты от 792 785 ₽/м²',
+      },
+      {
+        id: 'simvol',
+        city: 'Москва',
+        name: 'ЖК «Символ»',
+        developer: 'Донстрой',
+        district: 'ЮВАО (Лефортово)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 443700,
+        completion: 'Есть сданные – 2030',
+        sourceLabel: 'Квадрум',
+        sourceUrl: 'https://kvadroom.ru/complex/zhiloy-kvartal-simvol',
+        lotNote: 'Страница ЖК от 443 700 ₽/м²',
+      },
+      {
+        id: 'seliger-city',
+        city: 'Москва',
+        name: 'ЖК «Селигер Сити»',
+        developer: 'MR Group',
+        district: 'САО (Западное Дегунино)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 427951,
+        completion: 'Сдан – 2026',
+        sourceLabel: 'Avaho',
+        sourceUrl: 'https://avaho.ru/novostroyka/moskva/sao/zapadnoe-degunino/seliger-siti/2486860/',
+        lotNote: '2-комн. 77,41 м², 33 128 000 ₽ (427 951 ₽/м²)',
+      },
+      {
+        id: 'obrucheva-30',
+        city: 'Москва',
+        name: 'ЖК «Обручева 30»',
+        developer: 'Группа ЛСР',
+        district: 'ЮЗАО (Коньково)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 541284,
+        completion: '4 кв. 2026 – 4 кв. 2027',
+        sourceLabel: 'MskGuru',
+        sourceUrl: 'https://mskguru.ru/novostroyki/5040-zhk-obrucheva-30',
+        lotNote: '2-комн. 52,6 м² (541 284 ₽/м²)',
+      },
+      {
+        id: 'opus',
+        city: 'Москва',
+        name: 'Клубный дом «Опус» (Opus)',
+        developer: 'PIONEER',
+        district: 'ЮАО (Даниловский)',
+        housingClass: 'Премиум',
+        pricePerSqm: 1223600,
+        completion: '4 кв. 2026',
+        sourceLabel: 'Avaho',
+        sourceUrl: 'https://avaho.ru/novostroyka/moskva/uao/danilovskiy/opus/13891442/',
+        lotNote: '1-комн. 56,2 м², 68 766 320 ₽ (1 223 600 ₽/м²)',
+      },
+      {
+        id: 'republic',
+        city: 'Москва',
+        name: 'ЖК «Репаблик» (Republic)',
+        developer: 'Страна Девелопмент (ex-FORMA)',
+        district: 'ЦАО (Пресненский)',
+        housingClass: 'Премиум',
+        pricePerSqm: 842234,
+        completion: 'Есть сданные – 2026+',
+        sourceLabel: 'Avaho',
+        sourceUrl: 'https://avaho.ru/novostroyka/moskva/cao/presnenskiy/repablik/13435241/',
+        lotNote: '3-комн. 91,3 м², 76 896 000 ₽ (842 234 ₽/м²)',
+      },
+      {
+        id: 'krasnodar-city',
+        city: 'Краснодар',
+        name: 'ЖК «Краснодар Сити»',
+        developer: 'СК Сити',
+        district: 'Западный (Шоссе Нефтяников)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 175372,
+        completion: 'Сдан',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/kvartiry/biznes-klass/zhk-krasnodar-siti',
+        lotNote: '2-комн. 80,53 м² (175 372 ₽/м²)',
+      },
+      {
+        id: 'rekord-2',
+        city: 'Краснодар',
+        name: 'ЖК «Рекорд 2»',
+        developer: 'DOGMA',
+        district: 'Карасунский (ул. Новороссийская)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 196800,
+        completion: '3 кв. 2026 (6 из 8 домов сданы)',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/novostroyki/zhk-rekord',
+        lotNote: '3-комн. 101,4 м² (196 800 ₽/м²)',
+      },
+      {
+        id: 'patriki',
+        city: 'Краснодар',
+        name: 'ЖК «Патрики»',
+        developer: 'ГК ТОЧНО',
+        district: 'Карасунский (ул. Сормовская)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 211662,
+        completion: '3 кв. 2030 (часть домов сдана)',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/novostroyki/zhk-zhk-patriki',
+        lotNote: '3-комн. 67,84 м² (211 662 ₽/м²)',
+      },
+      {
+        id: 'endemik',
+        city: 'Краснодар',
+        name: 'ЖК «Эндемик»',
+        developer: 'ИНСИТИ',
+        district: 'Западный (Шоссе Нефтяников)',
+        housingClass: 'Бизнес',
+        pricePerSqm: 211143,
+        completion: 'Сдан (1 кв. 2026)',
+        sourceLabel: 'ДомостройРФ',
+        sourceUrl: 'https://krasnodar.domostroyrf.ru/novostroyki/zhk-endemik',
+        lotNote: '1-комн. 59,65 м² (211 143 ₽/м²)',
+      },
+      {
+        id: 'axis-center',
+        city: 'Краснодар',
+        name: 'АК «Аксис Центр»',
+        developer: 'ГК AXIS (СЗ Твоё Место)',
+        district: 'Центральный (ул. Северная)',
+        housingClass: 'Премиум (апартаменты)',
+        pricePerSqm: 451913,
+        completion: '4 кв. 2026',
+        sourceLabel: 'Яндекс Недвижимость',
+        sourceUrl: 'https://realty.yandex.ru/krasnodar/kupit/novostrojka/aksis-centr-251351/',
+        lotNote: 'От 18,44 млн ₽ / 40,8 м² (451 913 ₽/м²)',
+      },
+    ];
+
+    const URL_BY_NAME = new Map(FALLBACK_DATA.map((item) => [item.name.toLowerCase(), item.sourceUrl]));
+
+    const state = {
+      items: [...FALLBACK_DATA],
+      city: 'Сочи',
+      housingClass: 'Все',
+      budgetMln: 22,
+      area: 50,
+      sortMode: 'best', // 'best' | 'cheapest'
+      showFullTable: false,
+      dataSource: 'loading', // 'loading' | 'live' | 'fallback'
+      lastSync: null,
+    };
+
+    const el = {
+      syncStatusBadge: document.getElementById('syncStatusBadge'),
+      syncDot: document.getElementById('syncDot'),
+      syncText: document.getElementById('syncText'),
+      refreshSheetBtn: document.getElementById('refreshSheetBtn'),
+      refreshIcon: document.getElementById('refreshIcon'),
+      resetBtn: document.getElementById('resetBtn'),
+      cityPills: document.querySelectorAll('.city-pill'),
+      classPills: document.querySelectorAll('.class-pill'),
+      budgetInput: document.getElementById('budgetInput'),
+      budgetSlider: document.getElementById('budgetSlider'),
+      budgetPresets: document.querySelectorAll('.budget-preset'),
+      areaInput: document.getElementById('areaInput'),
+      areaSlider: document.getElementById('areaSlider'),
+      areaPresets: document.querySelectorAll('.area-preset'),
+      sortPills: document.querySelectorAll('.sort-pill'),
+      summaryBanner: document.getElementById('summaryBanner'),
+      resultsSubtitle: document.getElementById('resultsSubtitle'),
+      resultsGrid: document.getElementById('resultsGrid'),
+      toggleTableBtn: document.getElementById('toggleTableBtn'),
+      toggleTableLabel: document.getElementById('toggleTableLabel'),
+      toggleTableArrow: document.getElementById('toggleTableArrow'),
+      fullTableWrap: document.getElementById('fullTableWrap'),
+      fullTableBody: document.getElementById('fullTableBody'),
+      tableAreaLabel: document.getElementById('tableAreaLabel'),
+    };
+
+    function formatRub(value) {
+      return new Intl.NumberFormat('ru-RU').format(Math.round(value)) + ' ₽';
+    }
+
+    function formatMln(valueRub) {
+      const mln = valueRub / 1_000_000;
+      return mln.toLocaleString('ru-RU', {
+        minimumFractionDigits: mln >= 100 ? 0 : 1,
+        maximumFractionDigits: 1,
+      }) + ' млн ₽';
+    }
+
+    function isPremium(housingClass) {
+      return String(housingClass || '').toLowerCase().includes('премиум');
+    }
+
+    function parsePriceCell(cell) {
+      if (!cell) return 0;
+      if (typeof cell.v === 'number' && Number.isFinite(cell.v)) return Math.round(cell.v);
+      const raw = String(cell.f || cell.v || '').replace(/[^\d]/g, '');
+      return raw ? parseInt(raw, 10) : 0;
+    }
+
+    function cellText(cell) {
+      if (!cell) return '';
+      return String(cell.f ?? cell.v ?? '').trim();
+    }
+
+    function setSyncUI(mode) {
+      state.dataSource = mode;
+      el.refreshIcon.classList.remove('animate-spin');
+
+      if (mode === 'loading') {
+        el.refreshIcon.classList.add('animate-spin');
+        el.syncStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 border border-brand-100';
+        el.syncDot.className = 'w-2 h-2 rounded-full bg-brand-500 animate-pulse';
+        el.syncText.textContent = 'Синхронизация с таблицей…';
+      } else if (mode === 'live') {
+        const timeStr = state.lastSync
+          ? state.lastSync.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+          : '';
+        el.syncStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200';
+        el.syncDot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+        el.syncText.textContent = `Данные из Google Таблицы${timeStr ? ` · ${timeStr}` : ''}`;
+      } else {
+        el.syncStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 border border-brand-200';
+        el.syncDot.className = 'w-2 h-2 rounded-full bg-brand-600';
+        el.syncText.textContent = 'База из таблицы (15 ЖК)';
+      }
+    }
+
+    async function loadFromGoogleSheet() {
+      setSyncUI('loading');
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const response = await fetch(GVIZ_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const text = await response.text();
+        const start = text.indexOf('{');
+        const end = text.lastIndexOf('}');
+        if (start === -1 || end === -1) throw new Error('Invalid gviz payload');
+
+        const json = JSON.parse(text.slice(start, end + 1));
+        const rows = json?.table?.rows || [];
+        const parsed = [];
+
+        for (const row of rows) {
+          const c = row.c || [];
+          const city = cellText(c[0]);
+          const name = cellText(c[1]);
+          if (!city || !name) continue;
+          const lowerCity = city.toLowerCase();
+          if (lowerCity.includes('среднее') || lowerCity.includes('мин') || lowerCity.includes('макс') || lowerCity === 'город') {
+            continue;
+          }
+
+          const priceFinal = parsePriceCell(c[7]) || parsePriceCell(c[6]) || parsePriceCell(c[5]);
+          if (!priceFinal) continue;
+
+          const fallbackMatch = FALLBACK_DATA.find(
+            (f) => f.name.toLowerCase() === name.toLowerCase()
+          );
+
+          parsed.push({
+            id: fallbackMatch ? fallbackMatch.id : `row-${parsed.length}`,
+            city,
+            name,
+            developer: cellText(c[2]) || fallbackMatch?.developer || '—',
+            district: cellText(c[3]) || fallbackMatch?.district || '—',
+            housingClass: cellText(c[4]) || fallbackMatch?.housingClass || 'Бизнес',
+            pricePerSqm: priceFinal,
+            completion: cellText(c[8]) || fallbackMatch?.completion || '—',
+            sourceLabel: cellText(c[9]) || fallbackMatch?.sourceLabel || 'Источник',
+            sourceUrl: URL_BY_NAME.get(name.toLowerCase()) || fallbackMatch?.sourceUrl || `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,
+            lotNote: cellText(c[13]) || fallbackMatch?.lotNote || '',
+          });
+        }
+
+        if (parsed.length >= 3) {
+          state.items = parsed;
+          state.lastSync = new Date();
+          setSyncUI('live');
+        } else {
+          state.items = [...FALLBACK_DATA];
+          setSyncUI('fallback');
+        }
+      } catch (_err) {
+        state.items = [...FALLBACK_DATA];
+        setSyncUI('fallback');
+      }
+      render();
+    }
+
+    function getFilteredItems() {
+      return state.items.filter((item) => {
+        if (state.city !== 'Все' && item.city !== state.city) return false;
+        if (state.housingClass === 'Бизнес' && isPremium(item.housingClass)) return false;
+        if (state.housingClass === 'Премиум' && !isPremium(item.housingClass)) return false;
+        return true;
+      });
+    }
+
+    function getRecommendations() {
+      const budgetRub = state.budgetMln * 1_000_000;
+      const filtered = getFilteredItems();
+
+      const enriched = filtered.map((item) => {
+        const estimatedPrice = Math.round(item.pricePerSqm * state.area);
+        const diff = budgetRub - estimatedPrice; // >= 0: в бюджете
+        const fits = diff >= 0;
+        const maxAreaInBudget = item.pricePerSqm > 0 ? Math.floor(budgetRub / item.pricePerSqm) : 0;
+        return {
+          ...item,
+          estimatedPrice,
+          diff,
+          fits,
+          maxAreaInBudget,
+        };
+      });
+
+      const inBudget = enriched.filter((x) => x.fits);
+      const overBudget = enriched.filter((x) => !x.fits);
+
+      if (state.sortMode === 'cheapest') {
+        inBudget.sort((a, b) => a.estimatedPrice - b.estimatedPrice);
+      } else {
+        // Ближе к бюджету (максимум класса/качества в рамках заданного бюджета)
+        inBudget.sort((a, b) => a.diff - b.diff);
+      }
+
+      // Если не хватает до 3 вариантов — добираем ближайшими по переплате
+      overBudget.sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff));
+
+      const combined = [...inBudget, ...overBudget];
+      return {
+        top3: combined.slice(0, 3),
+        inBudgetCount: inBudget.length,
+        totalPool: enriched.length,
+        minPricePerSqm: enriched.length ? Math.min(...enriched.map((x) => x.pricePerSqm)) : 0,
+      };
+    }
+
+    function renderControls() {
+      const counts = {
+        Сочи: state.items.filter((i) => i.city === 'Сочи').length,
+        Москва: state.items.filter((i) => i.city === 'Москва').length,
+        Краснодар: state.items.filter((i) => i.city === 'Краснодар').length,
+        Все: state.items.length,
+      };
+
+      el.cityPills.forEach((btn) => {
+        const city = btn.dataset.city;
+        const active = state.city === city;
+        btn.textContent = `${city === 'Все' ? 'Все города' : city} (${counts[city] || 0})`;
+        btn.className = active
+          ? 'city-pill px-4 py-2 rounded-full text-sm font-semibold bg-brand-600 text-white shadow-sm transition active:scale-95'
+          : 'city-pill px-4 py-2 rounded-full text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition active:scale-95';
+      });
+
+      el.classPills.forEach((btn) => {
+        const cls = btn.dataset.class;
+        const active = state.housingClass === cls;
+        btn.className = active
+          ? 'class-pill px-4 py-2 rounded-full text-sm font-semibold bg-brand-600 text-white shadow-sm transition active:scale-95'
+          : 'class-pill px-4 py-2 rounded-full text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition active:scale-95';
+      });
+
+      el.sortPills.forEach((btn) => {
+        const active = state.sortMode === btn.dataset.sort;
+        btn.className = active
+          ? 'sort-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-brand-700 shadow-sm transition'
+          : 'sort-pill px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
+      });
+
+      el.budgetPresets.forEach((btn) => {
+        const val = Number(btn.dataset.budget);
+        const active = Math.abs(state.budgetMln - val) < 0.01;
+        btn.className = active
+          ? 'budget-preset px-3 py-1 rounded-full text-xs font-semibold bg-brand-600 text-white transition'
+          : 'budget-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition';
+      });
+
+      el.areaPresets.forEach((btn) => {
+        const val = Number(btn.dataset.area);
+        const active = state.area === val;
+        btn.className = active
+          ? 'area-preset px-3 py-1 rounded-full text-xs font-semibold bg-brand-600 text-white transition'
+          : 'area-preset px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition';
+      });
+
+      el.budgetInput.value = state.budgetMln;
+      el.budgetSlider.value = Math.min(150, Math.max(5, state.budgetMln));
+      el.areaInput.value = state.area;
+      el.areaSlider.value = Math.min(150, Math.max(20, state.area));
+      el.tableAreaLabel.textContent = state.area;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderResults() {
+      const { top3, inBudgetCount, totalPool, minPricePerSqm } = getRecommendations();
+      const budgetRub = state.budgetMln * 1_000_000;
+      const cityLabel = state.city === 'Все' ? 'по всем 3 городам' : `в городе ${state.city}`;
+
+      if (totalPool === 0) {
+        el.summaryBanner.innerHTML = `<span class="text-slate-700 font-medium">Нет ЖК под выбранный фильтр класса ${escapeHtml(cityLabel)}.</span> Попробуйте выбрать «Все классы».`;
+        el.resultsSubtitle.textContent = '0 объектов';
+        el.resultsGrid.innerHTML = `
+          <div class="md:col-span-3 bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-2">
+            <p class="text-base font-semibold text-slate-800">Под выбранные фильтры нет объектов</p>
+            <p class="text-sm text-slate-500">Переключите класс жилья на «Все классы» или выберите другой город.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const maxAreaPossible = minPricePerSqm > 0 ? Math.floor(budgetRub / minPricePerSqm) : 0;
+
+      if (inBudgetCount >= 3) {
+        el.summaryBanner.innerHTML = `В бюджет <strong class="text-slate-900">${formatMln(budgetRub)}</strong> за <strong class="text-slate-900">${state.area} м²</strong> укладываются <strong class="text-brand-700">${inBudgetCount} из ${totalPool} ЖК</strong> ${escapeHtml(cityLabel)}.`;
+      } else if (inBudgetCount > 0) {
+        el.summaryBanner.innerHTML = `В бюджет укладываются <strong class="text-brand-700">${inBudgetCount} ЖК</strong> из ${totalPool} — остальные слоты дополнены ближайшими альтернативами.`;
+      } else {
+        el.summaryBanner.innerHTML = `На <strong class="text-slate-900">${state.area} м²</strong> бюджет <strong class="text-slate-900">${formatMln(budgetRub)}</strong> ниже старта — показаны 3 ближайших ЖК (в этот бюджет ${escapeHtml(cityLabel)} поместится до <strong class="text-brand-700">${maxAreaPossible} м²</strong>).`;
+      }
+
+      el.resultsSubtitle.textContent = `Показано ${top3.length} из ${totalPool} · расчёт на ${state.area} м²`;
+
+      el.resultsGrid.innerHTML = top3
+        .map((item, idx) => {
+          const badgeClass = item.fits
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            : 'bg-amber-50 text-amber-800 border-amber-200';
+          const badgeText = item.fits
+            ? `В бюджете · запас ${formatMln(item.diff)}`
+            : `Ближайший · +${formatMln(Math.abs(item.diff))}`;
+
+          const segmentBadge = isPremium(item.housingClass)
+            ? 'bg-brand-900 text-white'
+            : 'bg-brand-50 text-brand-700 border border-brand-200';
+
+          const rankLabel = idx === 0 ? 'Лучшее совпадение' : `Вариант #${idx + 1}`;
+
+          return `
+            <article class="card-hover bg-white rounded-3xl border border-slate-200/90 p-5 flex flex-col justify-between gap-4">
+              <div class="space-y-3.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700">
+                    <span class="w-5 h-5 rounded-full bg-brand-600 text-white inline-flex items-center justify-center text-[11px]">${idx + 1}</span>
+                    ${rankLabel}
+                  </span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${segmentBadge}">
+                    ${escapeHtml(item.housingClass)}
+                  </span>
+                </div>
+
+                <div>
+                  <div class="text-xs font-medium text-slate-400 mb-0.5">${escapeHtml(item.city)}</div>
+                  <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(item.name)}</h3>
+                  <p class="text-xs text-slate-500 mt-1">${escapeHtml(item.developer)}</p>
+                </div>
+
+                <!-- Estimated Price Box -->
+                <div class="rounded-2xl bg-brand-50/70 border border-brand-100 p-3.5 space-y-1.5">
+                  <div class="text-[11px] font-semibold uppercase tracking-wider text-brand-700/80">
+                    Примерная цена за ${state.area} м²
+                  </div>
+                  <div class="text-2xl font-extrabold tracking-tight text-slate-900">
+                    ${formatMln(item.estimatedPrice)}
+                  </div>
+                  <div class="text-xs text-slate-600">
+                    от <strong class="text-slate-800">${formatRub(item.pricePerSqm)}</strong> / м²
+                  </div>
+                </div>
+
+                <!-- Budget fit badge -->
+                <div>
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${badgeClass}">
+                    ${badgeText}
+                  </span>
+                </div>
+
+                <!-- Specs -->
+                <dl class="space-y-1.5 text-xs text-slate-600 pt-1 border-t border-slate-100">
+                  <div class="flex justify-between gap-2">
+                    <dt class="text-slate-400 shrink-0">Район</dt>
+                    <dd class="text-right font-medium text-slate-700">${escapeHtml(item.district)}</dd>
+                  </div>
+                  <div class="flex justify-between gap-2">
+                    <dt class="text-slate-400 shrink-0">Срок сдачи</dt>
+                    <dd class="text-right font-medium text-slate-700">${escapeHtml(item.completion)}</dd>
+                  </div>
+                  ${
+                    !item.fits && item.maxAreaInBudget >= 15
+                      ? `<div class="flex justify-between gap-2">
+                          <dt class="text-slate-400 shrink-0">В ваш бюджет</dt>
+                          <dd class="text-right font-semibold text-brand-700">до ${item.maxAreaInBudget} м²</dd>
+                        </div>`
+                      : ''
+                  }
+                </dl>
+              </div>
+
+              <div class="pt-2">
+                <a
+                  href="${escapeHtml(item.sourceUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 active:scale-[0.98] transition shadow-sm"
+                >
+                  Источник: ${escapeHtml(item.sourceLabel)}
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    function renderFullTable() {
+      el.fullTableWrap.classList.toggle('hidden', !state.showFullTable);
+      el.toggleTableLabel.textContent = state.showFullTable ? 'Скрыть таблицу' : 'Показать таблицу';
+      el.toggleTableArrow.style.transform = state.showFullTable ? 'rotate(180deg)' : 'rotate(0deg)';
+
+      if (!state.showFullTable) return;
+
+      const budgetRub = state.budgetMln * 1_000_000;
+      el.fullTableBody.innerHTML = state.items
+        .map((item) => {
+          const est = Math.round(item.pricePerSqm * state.area);
+          const fits = est <= budgetRub;
+          return `
+            <tr class="hover:bg-brand-50/40 transition">
+              <td class="py-3 px-4 font-medium text-slate-700 whitespace-nowrap">${escapeHtml(item.city)}</td>
+              <td class="py-3 px-4 font-semibold text-slate-900">${escapeHtml(item.name)}</td>
+              <td class="py-3 px-4 text-slate-600">${escapeHtml(item.developer)}</td>
+              <td class="py-3 px-4 whitespace-nowrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isPremium(item.housingClass) ? 'bg-brand-900 text-white' : 'bg-brand-50 text-brand-700'}">
+                  ${escapeHtml(item.housingClass)}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800 whitespace-nowrap">${formatRub(item.pricePerSqm)}</td>
+              <td class="py-3 px-4 text-right font-semibold whitespace-nowrap ${fits ? 'text-emerald-700' : 'text-slate-600'}">${formatMln(est)}</td>
+              <td class="py-3 px-4 text-slate-600 whitespace-nowrap">${escapeHtml(item.completion)}</td>
+              <td class="py-3 px-4 text-right whitespace-nowrap">
+                <a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:text-brand-800 font-semibold underline underline-offset-2">
+                  Открыть
+                </a>
+              </td>
+            </tr>
+          `;
+        })
+        .join('');
+    }
+
+    function render() {
+      renderControls();
+      renderResults();
+      renderFullTable();
+    }
+
+    // Event listeners
+    el.cityPills.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.city = btn.dataset.city;
+        render();
+      });
+    });
+
+    el.classPills.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.housingClass = btn.dataset.class;
+        render();
+      });
+    });
+
+    el.sortPills.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.sortMode = btn.dataset.sort;
+        render();
+      });
+    });
+
+    el.budgetSlider.addEventListener('input', (e) => {
+      state.budgetMln = Number(e.target.value) || 5;
+      render();
+    });
+
+    el.budgetInput.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      if (Number.isFinite(val) && val > 0) {
+        state.budgetMln = Math.min(500, Math.max(1, val));
+        render();
+      }
+    });
+
+    el.budgetPresets.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.budgetMln = Number(btn.dataset.budget);
+        render();
+      });
+    });
+
+    el.areaSlider.addEventListener('input', (e) => {
+      state.area = Number(e.target.value) || 20;
+      render();
+    });
+
+    el.areaInput.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      if (Number.isFinite(val) && val >= 10) {
+        state.area = Math.min(500, Math.max(10, val));
+        render();
+      }
+    });
+
+    el.areaPresets.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.area = Number(btn.dataset.area);
+        render();
+      });
+    });
+
+    el.resetBtn.addEventListener('click', () => {
+      state.city = 'Сочи';
+      state.housingClass = 'Все';
+      state.budgetMln = 22;
+      state.area = 50;
+      state.sortMode = 'best';
+      render();
+    });
+
+    el.refreshSheetBtn.addEventListener('click', () => {
+      loadFromGoogleSheet();
+    });
+
+    el.toggleTableBtn.addEventListener('click', () => {
+      state.showFullTable = !state.showFullTable;
+      renderFullTable();
+    });
+
+    // Init
+    render();
+    loadFromGoogleSheet();
+  </script>
+</body>
+</html>
